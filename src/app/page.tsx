@@ -33,7 +33,7 @@ export default function Home() {
         handleDisplayLogin={handleDisplayLogin}
         authCheck={authCheck}
       />
-      {[...data, ...data].map((post: any) => {
+      {data.map((post: any) => {
         return (
           <Card
             key={post.id}

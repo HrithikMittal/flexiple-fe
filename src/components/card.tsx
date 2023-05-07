@@ -1,13 +1,27 @@
 import Image from "next/image";
+import axios from "axios";
+import { useQueryClient } from "react-query";
 
 const Card = (props: any) => {
   const { data, handleDisplayLogin, isUserAuthenticated } = props;
+  const queryClient = useQueryClient();
 
-  const handleUpvote = () => {
+  const handleUpvote = async () => {
     if (!isUserAuthenticated) {
       handleDisplayLogin();
       return;
     }
+    const token = localStorage.getItem("token");
+    await axios.post(
+      process.env.REACT_APP_BASE_URL + "/post/" + data._id + "/upvote",
+      {},
+      {
+        headers: {
+          Authorization: token,
+        },
+      }
+    );
+    queryClient.invalidateQueries("posts");
   };
 
   const handleReply = () => {
