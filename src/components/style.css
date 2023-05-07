@@ -24,13 +24,6 @@
   margin-bottom: 10px;
 }
 
-.input {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  column-gap: 10px;
-}
-
 .bottom {
   flex: 1;
   align-items: end;
@@ -70,8 +63,44 @@
 }
 
 .sidenavClosed {
-  composes: sidenav;
   transition: width 0.3s ease-in-out;
   width: 40px;
   overflow: hidden;
+}
+
+.lgModal {
+  background-color: white;
+  border-radius: 5px;
+  padding: 50px;
+  outline: none;
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 30px;
+}
+
+.title-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title-wrapper h2 {
+  font-weight: 600;
+}
+
+.input {
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+}
+
+.option-password {
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+  font-size: 12px;
+  align-items: flex-end;
+  font-style: italic;
+  color: #a129fe;
 }
