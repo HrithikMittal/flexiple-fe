@@ -8,7 +8,10 @@ const Card = (props: any) => {
       <div>
         <div className="profileImage">
           <Image
-            src={"https://xsgames.co/randomusers/avatar.php?g=male"}
+            src={
+              data.user.profileImage ||
+              "https://xsgames.co/randomusers/avatar.php?g=male"
+            }
             alt="Picture of the author"
             width={50}
             height={50}
@@ -17,11 +20,8 @@ const Card = (props: any) => {
       </div>
       <div>
         <div className="content">
-          <div className="name">Adhikansh Mittal</div>I absolutely didnt know
-          that Maggi was actually directly targeting working women and mothers.
-          Although, I remember their ads were focused on that messaging. But,
-          still, never thoughts that they were so laser-focused on that
-          demographic. Thanks for sharing! Looking forward to Part 2 :
+          <div className="name">{data.user.name}</div>
+          {data.content}
         </div>
         <div className="options">
           <div className="upvote">
@@ -31,7 +31,7 @@ const Card = (props: any) => {
               height={20}
               width={20}
             />
-            <span> 1</span>
+            <span>{data.likes?.length || 0}</span>
           </div>
           <div className="upvote">
             <Image
@@ -44,7 +44,7 @@ const Card = (props: any) => {
           </div>
         </div>
         <div>
-          {data.comments?.map((comment: any) => {
+          {data.replies?.map((comment: any) => {
             return <Card data={comment} key={comment.id} />;
           })}
         </div>
