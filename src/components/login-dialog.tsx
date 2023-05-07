@@ -1,17 +1,63 @@
 import React, { useState } from "react";
-import { Button, Modal, OutlinedInput } from "@mui/material";
+import { Button, Modal, OutlinedInput, Alert } from "@mui/material";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import "./style.css";
+import axios from "axios";
 
 const LoginDialog = (props: any) => {
-  const { displayLogin, handleDisplayLogin } = props;
+  const { displayLogin, handleDisplayLogin, authCheck } = props;
   const [signup, setSignup] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
+  const [error, setError] = useState("");
 
   const handleToggle = () => {
     setSignup(!signup);
+  };
+
+  const handleLogin = () => {
+    setError("");
+    let body: {
+      email: string;
+      password: string;
+      name?: string;
+    } = {
+      email,
+      password,
+    };
+    if (signup) {
+      body = {
+        ...body,
+        name,
+      };
+    }
+
+    // call api to login or signup
+    axios
+      .post(
+        process.env.REACT_APP_BASE_URL +
+          "/user" +
+          (signup ? "/signup" : "/login"),
+        body
+      )
+      .then((res) => {
+        if (res.data.success) {
+          if (signup) {
+            handleToggle();
+          } else {
+            localStorage.setItem("token", res.data.token);
+            handleDisplayLogin();
+            authCheck();
+          }
+        } else {
+          setError(res.data.message);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        setError("Something went wrong");
+      });
   };
 
   return (
@@ -59,12 +105,18 @@ const LoginDialog = (props: any) => {
               : `Don't have account want to Sign up?`}
           </span>
         </div>
+        {error && (
+          <div>
+            <Alert severity="error">{error}</Alert>
+          </div>
+        )}
         <div className="input">
           <Button
             variant="contained"
             style={{
               backgroundColor: "#a129fe",
             }}
+            onClick={handleLogin}
           >
             {signup ? "Sign Up" : "Login"}
           </Button>

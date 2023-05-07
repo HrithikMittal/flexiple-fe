@@ -1,7 +1,21 @@
 import Image from "next/image";
 
 const Card = (props: any) => {
-  const { data } = props;
+  const { data, handleDisplayLogin, isUserAuthenticated } = props;
+
+  const handleUpvote = () => {
+    if (!isUserAuthenticated) {
+      handleDisplayLogin();
+      return;
+    }
+  };
+
+  const handleReply = () => {
+    if (!isUserAuthenticated) {
+      handleDisplayLogin();
+      return;
+    }
+  };
 
   return (
     <div className="item">
@@ -24,21 +38,21 @@ const Card = (props: any) => {
           {data.content}
         </div>
         <div className="options">
-          <div className="upvote">
+          <div className="upvote" onClick={handleUpvote}>
             <Image
               src="https://cdn-icons-png.flaticon.com/512/4655/4655143.png"
               alt="upvote"
-              height={20}
-              width={20}
+              height={16}
+              width={16}
             />
             <span>{data.likes?.length || 0}</span>
           </div>
-          <div className="upvote">
+          <div className="upvote" onClick={handleReply}>
             <Image
               src="https://cdn-icons-png.flaticon.com/512/2462/2462719.png"
               alt="upvote"
-              height={20}
-              width={20}
+              height={16}
+              width={16}
             />
             <span>Reply</span>
           </div>
