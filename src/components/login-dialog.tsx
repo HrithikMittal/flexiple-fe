@@ -47,6 +47,7 @@ const LoginDialog = (props: any) => {
             handleToggle();
           } else {
             localStorage.setItem("token", res.data.token);
+            localStorage.setItem("user", JSON.stringify(res.data.user));
             handleDisplayLogin();
             authCheck();
           }

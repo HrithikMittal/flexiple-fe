@@ -12,8 +12,13 @@ const Card = (props: any) => {
       return;
     }
     const token = localStorage.getItem("token");
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+
     await axios.post(
-      process.env.REACT_APP_BASE_URL + "/post/" + data._id + "/upvote",
+      process.env.REACT_APP_BASE_URL +
+        "/post/" +
+        data._id +
+        (data.likes.indexOf(user.id) > -1 ? "/downvote" : "/upvote"),
       {},
       {
         headers: {
