@@ -1,7 +1,3 @@
-body {
-  /* background-color: #ececec; */
-}
-
 .container {
   max-width: 1280px;
   margin: auto;
@@ -53,9 +49,14 @@ body {
 
 .floating-button {
   position: fixed;
-  bottom: 20px;
-  right: 20px;
-  z-index: 100;
+  width: 60px;
+  height: 60px;
+  bottom: 40px;
+  right: 40px;
+  color: #fff;
+  border-radius: 50px;
+  text-align: center;
+  box-shadow: 2px 2px 3px #999;
 }
 
 .post-reply {
