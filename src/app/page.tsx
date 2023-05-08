@@ -90,15 +90,15 @@ export default function Home() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Fab
-        color="primary"
-        className="floating-button"
-        aria-label="add"
-        onClick={handleActivatePost}
-      >
-        <AddIcon />
-      </Fab>
       <div className="container">
+        <Fab
+          color="primary"
+          className="floating-button"
+          aria-label="add"
+          onClick={handleActivatePost}
+        >
+          <AddIcon />
+        </Fab>
         <LoginDialog
           displayLogin={displayLogin}
           handleDisplayLogin={handleDisplayLogin}
