@@ -91,14 +91,16 @@ export default function Home() {
   return (
     <ThemeProvider theme={theme}>
       <div className="container">
-        <Fab
-          color="primary"
-          className="floating-button"
-          aria-label="add"
-          onClick={handleActivatePost}
-        >
-          <AddIcon />
-        </Fab>
+        {!isLoading && (
+          <Fab
+            color="primary"
+            className="floating-button"
+            aria-label="add"
+            onClick={handleActivatePost}
+          >
+            <AddIcon />
+          </Fab>
+        )}
         <LoginDialog
           displayLogin={displayLogin}
           handleDisplayLogin={handleDisplayLogin}
