@@ -101,7 +101,9 @@ const Card = (props: any) => {
           <Image
             src={
               data.user.profileImage ||
-              "https://xsgames.co/randomusers/avatar.php?g=male"
+              "https://xsgames.co/randomusers/assets/avatars/male/" +
+                (Math.floor(Math.random() * 78) + 1) +
+                ".jpg"
             }
             alt="Picture of the author"
             width={50}
