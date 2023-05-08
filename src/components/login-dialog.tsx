@@ -114,10 +114,9 @@ const LoginDialog = (props: any) => {
         <div className="input">
           <Button
             variant="contained"
-            style={{
-              backgroundColor: "#a129fe",
-            }}
+            color="primary"
             onClick={handleLogin}
+            disabled={!email && !password}
           >
             {signup ? "Sign Up" : "Login"}
           </Button>

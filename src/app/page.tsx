@@ -5,7 +5,19 @@ import "./style.css";
 import Card from "@/components/card";
 import LoginDialog from "@/components/login-dialog";
 import { useCallback, useEffect, useState } from "react";
+import { ThemeProvider } from "@mui/material";
+import { createTheme } from "@mui/material";
 
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#a129fe",
+    },
+    secondary: {
+      main: "#ff4500",
+    },
+  },
+});
 export default function Home() {
   const { data } = usePosts();
   const [displayLogin, setDisplayLogin] = useState(false);
@@ -28,21 +40,23 @@ export default function Home() {
 
   return (
     <div className="container">
-      <LoginDialog
-        displayLogin={displayLogin}
-        handleDisplayLogin={handleDisplayLogin}
-        authCheck={authCheck}
-      />
-      {data.map((post: any) => {
-        return (
-          <Card
-            key={post.id}
-            data={post}
-            handleDisplayLogin={handleDisplayLogin}
-            isUserAuthenticated={isUserAuthenticated}
-          />
-        );
-      })}
+      <ThemeProvider theme={theme}>
+        <LoginDialog
+          displayLogin={displayLogin}
+          handleDisplayLogin={handleDisplayLogin}
+          authCheck={authCheck}
+        />
+        {data.map((post: any) => {
+          return (
+            <Card
+              key={post.id}
+              data={post}
+              handleDisplayLogin={handleDisplayLogin}
+              isUserAuthenticated={isUserAuthenticated}
+            />
+          );
+        })}
+      </ThemeProvider>
     </div>
   );
 }

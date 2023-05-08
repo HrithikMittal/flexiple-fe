@@ -1,10 +1,14 @@
+import { useState } from "react";
 import Image from "next/image";
 import axios from "axios";
 import { useQueryClient } from "react-query";
+import { Button, TextareaAutosize } from "@mui/material";
 
 const Card = (props: any) => {
   const { data, handleDisplayLogin, isUserAuthenticated } = props;
   const queryClient = useQueryClient();
+  const [displayReply, setDisplayReply] = useState(false);
+  const [reply, setReply] = useState("");
 
   const handleUpvote = async () => {
     if (!isUserAuthenticated) {
@@ -34,6 +38,35 @@ const Card = (props: any) => {
       handleDisplayLogin();
       return;
     }
+    setDisplayReply(!displayReply);
+  };
+
+  const handleSendReply = async () => {
+    const token = localStorage.getItem("token");
+    let body: any = {
+      content: reply,
+    };
+    if (data.parentId) {
+      body = {
+        ...body,
+        parentId: data.parentId,
+        replyTo: data._id,
+      };
+    } else {
+      body = {
+        ...body,
+        parentId: data._id,
+      };
+    }
+
+    await axios.post(process.env.REACT_APP_BASE_URL + "/post", body, {
+      headers: {
+        Authorization: token,
+      },
+    });
+    setReply("");
+    setDisplayReply(false);
+    queryClient.invalidateQueries("posts");
   };
 
   return (
@@ -77,8 +110,32 @@ const Card = (props: any) => {
           </div>
         </div>
         <div>
+          {displayReply && (
+            <div className="reply">
+              <TextareaAutosize
+                minRows={5}
+                value={reply}
+                onChange={(e) => setReply(e.target.value)}
+              />
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleSendReply}
+                disabled={!reply}
+              >
+                Reply
+              </Button>
+            </div>
+          )}
           {data.replies?.map((comment: any) => {
-            return <Card data={comment} key={comment.id} />;
+            return (
+              <Card
+                data={comment}
+                key={comment.id}
+                handleDisplayLogin={handleDisplayLogin}
+                isUserAuthenticated={isUserAuthenticated}
+              />
+            );
           })}
         </div>
       </div>
