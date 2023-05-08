@@ -2,7 +2,8 @@ import axios from "axios";
 import { useQuery } from "react-query";
 
 const getPosts = async () => {
-  const res = await axios.get("http://localhost:4000/post");
+  const url = process.env.REACT_APP_BASE_URL || "";
+  const res = await axios.get(url);
   return res.data;
 };
 
