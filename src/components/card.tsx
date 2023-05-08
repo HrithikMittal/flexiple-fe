@@ -1,14 +1,23 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import axios from "axios";
 import { useQueryClient } from "react-query";
 import { Button, TextareaAutosize } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const Card = (props: any) => {
   const { data, handleDisplayLogin, isUserAuthenticated } = props;
   const queryClient = useQueryClient();
   const [displayReply, setDisplayReply] = useState(false);
   const [reply, setReply] = useState("");
+  const [displayDelete, setDisplayDelete] = useState(false);
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    if (user.id === data.user._id) {
+      setDisplayDelete(true);
+    }
+  }, [data.user._id]);
 
   const handleUpvote = async () => {
     if (!isUserAuthenticated) {
@@ -69,6 +78,22 @@ const Card = (props: any) => {
     queryClient.invalidateQueries("posts");
   };
 
+  const handleDelete = () => {
+    const token = localStorage.getItem("token");
+    axios
+      .delete(process.env.REACT_APP_BASE_URL + "/post/" + data._id, {
+        headers: {
+          Authorization: token,
+        },
+      })
+      .then((res) => {
+        queryClient.invalidateQueries("posts");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <div className="item">
       <div>
@@ -108,6 +133,16 @@ const Card = (props: any) => {
             />
             <span>Reply</span>
           </div>
+          {displayDelete && (
+            <div className="upvote" onClick={handleDelete}>
+              <DeleteIcon
+                style={{
+                  fontSize: 18,
+                }}
+              />
+              <span>Delete</span>
+            </div>
+          )}
         </div>
         <div>
           {displayReply && (
