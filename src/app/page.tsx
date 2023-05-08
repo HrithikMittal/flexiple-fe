@@ -10,6 +10,7 @@ import {
   TextareaAutosize,
   Button,
   createTheme,
+  Skeleton,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import Fab from "@mui/material/Fab";
@@ -27,7 +28,7 @@ const theme = createTheme({
   },
 });
 export default function Home() {
-  const { data } = usePosts();
+  const { data, isLoading } = usePosts();
   const [displayLogin, setDisplayLogin] = useState(false);
   const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
   const [displayReply, setDisplayReply] = useState(false);
@@ -89,15 +90,15 @@ export default function Home() {
 
   return (
     <ThemeProvider theme={theme}>
+      <Fab
+        color="primary"
+        className="floating-button"
+        aria-label="add"
+        onClick={handleActivatePost}
+      >
+        <AddIcon />
+      </Fab>
       <div className="container">
-        <Fab
-          color="primary"
-          className="floating-button"
-          aria-label="add"
-          onClick={handleActivatePost}
-        >
-          <AddIcon />
-        </Fab>
         <LoginDialog
           displayLogin={displayLogin}
           handleDisplayLogin={handleDisplayLogin}
@@ -120,6 +121,18 @@ export default function Home() {
             </Button>
           </div>
         )}
+        {isLoading &&
+          new Array(10).fill(0).map((_i, index) => {
+            return (
+              <Skeleton
+                key={index}
+                variant="rectangular"
+                width={"100%"}
+                height={120}
+                style={{ margin: "1rem 0rem" }}
+              />
+            );
+          })}
         {data.map((post: any) => {
           return (
             <Card

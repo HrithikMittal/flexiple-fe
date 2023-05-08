@@ -22,6 +22,7 @@ const LoginDialog = (props: any) => {
       email: string;
       password: string;
       name?: string;
+      profileImage?: string;
     } = {
       email,
       password,
@@ -30,6 +31,10 @@ const LoginDialog = (props: any) => {
       body = {
         ...body,
         name,
+        profileImage:
+          "https://xsgames.co/randomusers/assets/avatars/male/" +
+          (Math.floor(Math.random() * 78) + 1) +
+          ".jpg",
       };
     }
 
