@@ -1,7 +1,6 @@
 "use client";
 
 import { usePosts } from "@/hooks/usePosts";
-import "./style.css";
 import Card from "@/components/card";
 import LoginDialog from "@/components/login-dialog";
 import { useCallback, useEffect, useState } from "react";
@@ -16,6 +15,7 @@ import AddIcon from "@mui/icons-material/Add";
 import Fab from "@mui/material/Fab";
 import axios from "axios";
 import { useQueryClient } from "react-query";
+import { container, floatingButton, reply } from "./style";
 
 const theme = createTheme({
   palette: {
@@ -90,11 +90,11 @@ export default function Home() {
 
   return (
     <ThemeProvider theme={theme}>
-      <div className="container">
+      <div className={container}>
         {!isLoading && (
           <Fab
             color="primary"
-            className="floating-button"
+            className={floatingButton}
             aria-label="add"
             onClick={handleActivatePost}
           >
@@ -107,7 +107,7 @@ export default function Home() {
           authCheck={authCheck}
         />
         {displayReply && (
-          <div className="reply post-reply">
+          <div className={reply}>
             <TextareaAutosize
               minRows={5}
               value={post}

@@ -33,21 +33,30 @@ export const optionItem = css`
   display: flex;
   column-gap: 5px;
   cursor: pointer;
+  align-items: center;
 `;
 
 export const replyItem = css`
   display: flex;
   flex-direction: column;
   row-gap: 10px;
+  width: 100%;
   textarea {
     padding: 10px;
     font-size: 15px;
     border-radius: 10px;
     border-color: none;
     outline: none;
-    width: 100%;
+    width: 98%;
     height: 100px;
   }
+`;
+
+export const options = css`
+  display: flex;
+  align-items: center;
+  column-gap: 10px;
+  margin: 5px;
 `;
 
 // login modal css

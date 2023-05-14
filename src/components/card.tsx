@@ -10,6 +10,7 @@ import {
   item,
   name,
   optionItem,
+  options,
   profileImage,
   replyItem,
 } from "./style";
@@ -21,6 +22,7 @@ const Card = (props: any) => {
   const [reply, setReply] = useState("");
   const [displayDelete, setDisplayDelete] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [editContent, setEditContent] = useState(data.content);
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user") || "{}");
@@ -106,25 +108,29 @@ const Card = (props: any) => {
 
   const handleEdit = () => {
     setIsEditing(true);
-    // const token = localStorage.getItem("token");
-    // axios
-    //   .put(
-    //     process.env.REACT_APP_BASE_URL + "/post/" + data._id,
-    //     {
-    //       content: data.content,
-    //     },
-    //     {
-    //       headers: {
-    //         Authorization: token,
-    //       },
-    //     }
-    //   )
-    //   .then((res) => {
-    //     queryClient.invalidateQueries("posts");
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+  };
+
+  const handleEditPost = async () => {
+    const token = localStorage.getItem("token");
+    axios
+      .put(
+        process.env.REACT_APP_BASE_URL + "/post/" + data._id,
+        {
+          content: editContent,
+        },
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      )
+      .then((res) => {
+        queryClient.invalidateQueries("posts");
+        setIsEditing(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -144,12 +150,21 @@ const Card = (props: any) => {
           />
         </div>
       </div>
-      <div>
+      <div
+        style={{
+          width: "100%",
+        }}
+      >
         <div className={content}>
           {isEditing ? (
-            <>
-              <textarea />
-            </>
+            <div className={replyItem}>
+              <textarea
+                value={editContent}
+                onChange={(e) => {
+                  setEditContent(e.target.value);
+                }}
+              />
+            </div>
           ) : (
             <>
               <div className={name}>{data.user.name}</div>
@@ -157,40 +172,57 @@ const Card = (props: any) => {
             </>
           )}
         </div>
-        <div className="options">
-          <div className={optionItem} onClick={handleUpvote}>
-            <Image
-              src="https://cdn-icons-png.flaticon.com/512/4655/4655143.png"
-              alt="upvote"
-              height={16}
-              width={16}
-            />
-            <span>{data.likes?.length || 0}</span>
-          </div>
-          <div className={optionItem} onClick={handleReply}>
-            <Image
-              src="https://cdn-icons-png.flaticon.com/512/2462/2462719.png"
-              alt="upvote"
-              height={16}
-              width={16}
-            />
-            <span>Reply</span>
-          </div>
-          {displayDelete && (
-            <div className={optionItem} onClick={handleDelete}>
-              <DeleteIcon
-                style={{
-                  fontSize: 18,
-                }}
-              />
-              <span>Delete</span>
-            </div>
-          )}
-          {displayDelete && (
-            <div className={optionItem} onClick={handleEdit}>
-              <Edit />
-              <span>Edit</span>
-            </div>
+        <div className={options}>
+          {isEditing ? (
+            <>
+              <Button
+                variant="text"
+                color="error"
+                onClick={() => setIsEditing(false)}
+              >
+                Cancel
+              </Button>
+              <Button variant="text" onClick={handleEditPost}>
+                Save
+              </Button>
+            </>
+          ) : (
+            <>
+              <div className={optionItem} onClick={handleUpvote}>
+                <Image
+                  src="https://cdn-icons-png.flaticon.com/512/4655/4655143.png"
+                  alt="upvote"
+                  height={16}
+                  width={16}
+                />
+                <span>{data.likes?.length || 0}</span>
+              </div>
+              <div className={optionItem} onClick={handleReply}>
+                <Image
+                  src="https://cdn-icons-png.flaticon.com/512/2462/2462719.png"
+                  alt="upvote"
+                  height={16}
+                  width={16}
+                />
+                <span>Reply</span>
+              </div>
+              {displayDelete && (
+                <div className={optionItem} onClick={handleDelete}>
+                  <DeleteIcon
+                    style={{
+                      fontSize: 18,
+                    }}
+                  />
+                  <span>Delete</span>
+                </div>
+              )}
+              {displayDelete && (
+                <div className={optionItem} onClick={handleEdit}>
+                  <Edit />
+                  <span>Edit</span>
+                </div>
+              )}
+            </>
           )}
         </div>
         <div>
