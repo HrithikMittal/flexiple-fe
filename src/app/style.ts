@@ -3,6 +3,8 @@ import { css } from "@emotion/css";
 export const container = css`
   max-width: 1280px;
   margin: auto;
+  display: flex;
+  flex-direction: column;
 `;
 
 export const floatingButton = css`
