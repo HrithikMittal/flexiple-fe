@@ -4,6 +4,7 @@ export const item = css`
   display: flex;
   padding: 10px;
   column-gap: 10px;
+  width: 100%;
 `;
 
 export const profileImage = css`

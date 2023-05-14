@@ -125,23 +125,22 @@ const Card = (props: any) => {
           width: "100%",
         }}
       >
-        <div className={content}>
-          {isEditing ? (
-            <div className={replyItem}>
-              <textarea
-                value={editContent}
-                onChange={(e) => {
-                  setEditContent(e.target.value);
-                }}
-              />
-            </div>
-          ) : (
-            <>
-              <div className={name}>{data.user.name}</div>
-              {data.content}
-            </>
-          )}
-        </div>
+        {isEditing ? (
+          <div className={replyItem}>
+            <textarea
+              value={editContent}
+              onChange={(e) => {
+                setEditContent(e.target.value);
+              }}
+            />
+          </div>
+        ) : (
+          <div className={content}>
+            <div className={name}>{data.user.name}</div>
+            {data.content}
+          </div>
+        )}
+
         <div className={options}>
           {isEditing ? (
             <>
@@ -188,7 +187,11 @@ const Card = (props: any) => {
               )}
               {displayDelete && (
                 <div className={optionItem} onClick={handleEdit}>
-                  <Edit />
+                  <Edit
+                    style={{
+                      fontSize: 18,
+                    }}
+                  />
                   <span>Edit</span>
                 </div>
               )}
