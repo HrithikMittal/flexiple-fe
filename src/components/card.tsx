@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import axios from "axios";
-import { useQueryClient } from "react-query";
 import { Button, TextareaAutosize } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Edit } from "@mui/icons-material";
@@ -14,10 +12,14 @@ import {
   profileImage,
   replyItem,
 } from "./style";
+import { useEditPost } from "@/hooks/usePosts";
+import { getItem } from "@/utils/localstorage";
 
 const Card = (props: any) => {
   const { data, handleDisplayLogin, isUserAuthenticated } = props;
-  const queryClient = useQueryClient();
+
+  const editMutation = useEditPost();
+
   const [displayReply, setDisplayReply] = useState(false);
   const [reply, setReply] = useState("");
   const [displayDelete, setDisplayDelete] = useState(false);
@@ -25,7 +27,7 @@ const Card = (props: any) => {
   const [editContent, setEditContent] = useState(data.content);
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    const user = getItem("user");
     if (user.id === data.user._id) {
       setDisplayDelete(true);
     }
@@ -36,22 +38,13 @@ const Card = (props: any) => {
       handleDisplayLogin();
       return;
     }
-    const token = localStorage.getItem("token");
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
-
-    await axios.post(
-      process.env.REACT_APP_BASE_URL +
-        "/post/" +
-        data._id +
-        (data.likes.indexOf(user.id) > -1 ? "/downvote" : "/upvote"),
-      {},
-      {
-        headers: {
-          Authorization: token,
-        },
-      }
-    );
-    queryClient.invalidateQueries("posts");
+    const user = getItem("user");
+    editMutation.mutate({
+      method: "POST",
+      path:
+        data._id + (data.likes.indexOf(user.id) > -1 ? "/downvote" : "/upvote"),
+      body: null,
+    });
   };
 
   const handleReply = () => {
@@ -63,7 +56,6 @@ const Card = (props: any) => {
   };
 
   const handleSendReply = async () => {
-    const token = localStorage.getItem("token");
     let body: any = {
       content: reply,
     };
@@ -79,31 +71,21 @@ const Card = (props: any) => {
         parentId: data._id,
       };
     }
-
-    await axios.post(process.env.REACT_APP_BASE_URL + "/post", body, {
-      headers: {
-        Authorization: token,
-      },
+    editMutation.mutate({
+      method: "POST",
+      path: "",
+      body: body,
     });
     setReply("");
     setDisplayReply(false);
-    queryClient.invalidateQueries("posts");
   };
 
   const handleDelete = () => {
-    const token = localStorage.getItem("token");
-    axios
-      .delete(process.env.REACT_APP_BASE_URL + "/post/" + data._id, {
-        headers: {
-          Authorization: token,
-        },
-      })
-      .then((res) => {
-        queryClient.invalidateQueries("posts");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    editMutation.mutate({
+      method: "DELETE",
+      path: data._id,
+      body: null,
+    });
   };
 
   const handleEdit = () => {
@@ -111,26 +93,14 @@ const Card = (props: any) => {
   };
 
   const handleEditPost = async () => {
-    const token = localStorage.getItem("token");
-    axios
-      .put(
-        process.env.REACT_APP_BASE_URL + "/post/" + data._id,
-        {
-          content: editContent,
-        },
-        {
-          headers: {
-            Authorization: token,
-          },
-        }
-      )
-      .then((res) => {
-        queryClient.invalidateQueries("posts");
-        setIsEditing(false);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    editMutation.mutate({
+      method: "PUT",
+      path: data._id,
+      body: {
+        content: editContent,
+      },
+    });
+    setIsEditing(false);
   };
 
   return (
