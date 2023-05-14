@@ -45,6 +45,7 @@
 .upvote {
   display: flex;
   column-gap: 5px;
+  cursor: pointer;
 }
 
 .floating-button {

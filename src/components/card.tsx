@@ -4,6 +4,15 @@ import axios from "axios";
 import { useQueryClient } from "react-query";
 import { Button, TextareaAutosize } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { Edit } from "@mui/icons-material";
+import {
+  content,
+  item,
+  name,
+  optionItem,
+  profileImage,
+  replyItem,
+} from "./style";
 
 const Card = (props: any) => {
   const { data, handleDisplayLogin, isUserAuthenticated } = props;
@@ -11,6 +20,7 @@ const Card = (props: any) => {
   const [displayReply, setDisplayReply] = useState(false);
   const [reply, setReply] = useState("");
   const [displayDelete, setDisplayDelete] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user") || "{}");
@@ -94,10 +104,33 @@ const Card = (props: any) => {
       });
   };
 
+  const handleEdit = () => {
+    setIsEditing(true);
+    // const token = localStorage.getItem("token");
+    // axios
+    //   .put(
+    //     process.env.REACT_APP_BASE_URL + "/post/" + data._id,
+    //     {
+    //       content: data.content,
+    //     },
+    //     {
+    //       headers: {
+    //         Authorization: token,
+    //       },
+    //     }
+    //   )
+    //   .then((res) => {
+    //     queryClient.invalidateQueries("posts");
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+  };
+
   return (
-    <div className="item">
+    <div className={item}>
       <div>
-        <div className="profileImage">
+        <div className={profileImage}>
           <Image
             src={
               data.user.profileImage ||
@@ -112,12 +145,20 @@ const Card = (props: any) => {
         </div>
       </div>
       <div>
-        <div className="content">
-          <div className="name">{data.user.name}</div>
-          {data.content}
+        <div className={content}>
+          {isEditing ? (
+            <>
+              <textarea />
+            </>
+          ) : (
+            <>
+              <div className={name}>{data.user.name}</div>
+              {data.content}
+            </>
+          )}
         </div>
         <div className="options">
-          <div className="upvote" onClick={handleUpvote}>
+          <div className={optionItem} onClick={handleUpvote}>
             <Image
               src="https://cdn-icons-png.flaticon.com/512/4655/4655143.png"
               alt="upvote"
@@ -126,7 +167,7 @@ const Card = (props: any) => {
             />
             <span>{data.likes?.length || 0}</span>
           </div>
-          <div className="upvote" onClick={handleReply}>
+          <div className={optionItem} onClick={handleReply}>
             <Image
               src="https://cdn-icons-png.flaticon.com/512/2462/2462719.png"
               alt="upvote"
@@ -136,7 +177,7 @@ const Card = (props: any) => {
             <span>Reply</span>
           </div>
           {displayDelete && (
-            <div className="upvote" onClick={handleDelete}>
+            <div className={optionItem} onClick={handleDelete}>
               <DeleteIcon
                 style={{
                   fontSize: 18,
@@ -145,10 +186,16 @@ const Card = (props: any) => {
               <span>Delete</span>
             </div>
           )}
+          {displayDelete && (
+            <div className={optionItem} onClick={handleEdit}>
+              <Edit />
+              <span>Edit</span>
+            </div>
+          )}
         </div>
         <div>
           {displayReply && (
-            <div className="reply">
+            <div className={replyItem}>
               <TextareaAutosize
                 minRows={5}
                 value={reply}

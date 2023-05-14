@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Button, Modal, OutlinedInput, Alert } from "@mui/material";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
-import "./style.css";
 import axios from "axios";
+import { inputStyle, lgModal, passwordStyle, titleWrapper } from "./style";
 
 const LoginDialog = (props: any) => {
   const { displayLogin, handleDisplayLogin, authCheck } = props;
@@ -75,13 +75,13 @@ const LoginDialog = (props: any) => {
         alignItems: "center",
       }}
     >
-      <div className="lgModal">
-        <div className="title-wrapper">
+      <div className={lgModal}>
+        <div className={titleWrapper}>
           <h2>{signup ? "Sign Up" : "Login"}</h2>
           <CancelOutlinedIcon onClick={handleDisplayLogin} />
         </div>
         {signup && (
-          <div className="input">
+          <div className={inputStyle}>
             <label>Name</label>
             <OutlinedInput
               type="name"
@@ -90,7 +90,7 @@ const LoginDialog = (props: any) => {
             />
           </div>
         )}
-        <div className="input">
+        <div className={inputStyle}>
           <label>Email</label>
           <OutlinedInput
             type="email"
@@ -98,14 +98,14 @@ const LoginDialog = (props: any) => {
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
-        <div className="input">
+        <div className={inputStyle}>
           <label>Password</label>
           <OutlinedInput
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <span className="option-password" onClick={handleToggle}>
+          <span className={passwordStyle} onClick={handleToggle}>
             {signup
               ? `Already have account? please login`
               : `Don't have account want to Sign up?`}
@@ -116,7 +116,7 @@ const LoginDialog = (props: any) => {
             <Alert severity="error">{error}</Alert>
           </div>
         )}
-        <div className="input">
+        <div className={inputStyle}>
           <Button
             variant="contained"
             color="primary"
