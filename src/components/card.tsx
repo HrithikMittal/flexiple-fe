@@ -28,7 +28,7 @@ const Card = (props: any) => {
 
   useEffect(() => {
     const user = getItem("user");
-    if (user.id === data.user._id) {
+    if (user?.id === data.user._id) {
       setDisplayDelete(true);
     }
   }, [data.user._id]);
@@ -110,9 +110,7 @@ const Card = (props: any) => {
           <Image
             src={
               data.user.profileImage ||
-              "https://xsgames.co/randomusers/assets/avatars/male/" +
-                (Math.floor(Math.random() * 78) + 1) +
-                ".jpg"
+              "https://xsgames.co/randomusers/assets/avatars/male/6.jpg"
             }
             alt="Picture of the author"
             width={50}
